@@ -1,5 +1,7 @@
 const v1Routes = require('express').Router();
-const userRoutes = require('./auth');
+const authRoutes = require('./auth');
+const projectRoutes = require('./project');
+const authMiddleware = require('../../middleware/auth');
 
 v1Routes.get('/', function (req, res) {
     res.status(200).json({
@@ -10,6 +12,7 @@ v1Routes.get('/', function (req, res) {
     });
 })
 
-v1Routes.use('/auth', userRoutes);
+v1Routes.use('/auth', authRoutes);
+v1Routes.use('/project', [authMiddleware, projectRoutes]);
 
 module.exports = v1Routes;

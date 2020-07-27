@@ -11,7 +11,11 @@ app.use((req, res, next) => {
         server: 'gws',
         eTag: ''
     })
-    next();
+    if (req.method === 'OPTIONS') {
+        return res.send(200);
+    } else {
+        return next();
+    }
 })
 
 app.use(function (req, res, next) {

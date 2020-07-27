@@ -20,6 +20,14 @@ const UserSchema = Schema(
         verification: {
             type: String
         },
+        type: {
+            type: String,
+            default: "FREE",
+        },
+        shared: [{
+            id: String,
+            level: Number,
+        }]
     },
     {
         timestamps: true
