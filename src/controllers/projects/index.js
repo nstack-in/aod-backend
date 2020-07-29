@@ -83,19 +83,25 @@ function updateProject(req, res) {
     }
     let update = (({ name, description }) => ({ name, description }))(req.body);
     update.owner = req.headers['user'].data.id;
-    ProjectModel.findOneAndUpdate({ owner: user_id, _id: req.params.id }, update, function (err, data) {
-        if (err) return res.json({
-            response_time: Date.now() - req.start,
-            data: [],
-            message: "Something went wrong",
-            error: err.message,
+    ProjectModel.findOneAndUpdate(
+        { owner: user_id, _id: req.params.id },
+        update,
+        { new: true },
+        function (err, data) {
+            if (err) return res.json({
+                response_time: Date.now() - req.start,
+                data: [],
+                message: "Something went wrong",
+                error: {
+                    message: err.message,
+                }
+            });
+            res.status(200).json({
+                response_time: Date.now() - req.start,
+                message: "Updated the Project",
+                data: data
+            });
         });
-        res.status(200).json({
-            response_time: Date.now() - req.start,
-            message: "Project By ID",
-            data: data
-        });
-    });
 
 }
 
