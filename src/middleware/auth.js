@@ -6,7 +6,13 @@ function authCheck(req, res, next) {
     try {
         decoded = jwt.verify(token, process.env['JWT_SECRET']);
     } catch{
-        res.status(401).json({ message: "invalid token", data: [] });
+        res.status(401).json({
+            message: "invalid token", data: [], error: {
+                message: "Token Expired",
+                code: "",
+                status: true,
+            }
+        });
     }
     req.headers['user'] = decoded;
     next();
