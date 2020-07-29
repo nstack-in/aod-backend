@@ -29,8 +29,6 @@ function createProject(req, res) {
 
 }
 
-
-
 function listProjects(req, res) {
     let user_id = req.headers['user'].data.id;
     ProjectModel.find({ owner: user_id }, function (err, data) {
@@ -74,9 +72,36 @@ function findProjects(req, res) {
 
 }
 
+function updateProject(req, res) {
+    let user_id = req.headers['user'].data.id;
+    var valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    if (!valid) {
+        return res.status(401).json({
+            response_time: Date.now() - req.start,
+            message: "Invalid Project ID",
+        });
+    }
+    let update = (({ name, description }) => ({ name, description }))(req.body);
+    update.owner = req.headers['user'].data.id;
+    ProjectModel.findOneAndUpdate({ owner: user_id, _id: req.params.id }, update, function (err, data) {
+        if (err) return res.json({
+            response_time: Date.now() - req.start,
+            data: [],
+            message: "Something went wrong",
+            error: err.message,
+        });
+        res.status(200).json({
+            response_time: Date.now() - req.start,
+            message: "Project By ID",
+            data: data
+        });
+    });
+
+}
 
 module.exports = {
     create: createProject,
+    update: updateProject,
     list: listProjects,
     find: findProjects,
 }
