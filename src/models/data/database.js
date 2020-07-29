@@ -5,7 +5,7 @@ const Model = mongoose.model;
 
 const DatabaseSchema = Schema(
     {
-        __owner__: {
+        __project__: {
             type: String,
             required: true,
             select: false,
@@ -17,11 +17,12 @@ const DatabaseSchema = Schema(
         },
     },
     {
-        timestamps: true, strict: false
+        versionKey: false,
+        timestamps: true, strict: false,
     }
 );
 
-DatabaseSchema.index({ name: 1 });
+DatabaseSchema.index({ __owner__: 1, __endpoint__: 1 });
 
 var Endpoint = Model('db', DatabaseSchema);
 
