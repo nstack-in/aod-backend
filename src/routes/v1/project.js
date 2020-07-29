@@ -1,5 +1,5 @@
 const projectRoutes = require('express').Router();
-const { create, list, find, update } = require('../../controllers/projects');
+const { create, list, find, update, remove } = require('../../controllers/projects');
 
 projectRoutes.get('/', function (req, res) {
     res.status(200).json({
@@ -12,5 +12,6 @@ projectRoutes.get('/list', list);
 projectRoutes.post('/new', create);
 projectRoutes.put('/:id', update);
 projectRoutes.get('/:id', find);
+projectRoutes.delete('/:id', remove);
 
 module.exports = projectRoutes;

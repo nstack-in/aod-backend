@@ -104,10 +104,38 @@ function updateProject(req, res) {
         });
 
 }
-
+function removeProject(req, res) {
+    let user_id = req.headers['user'].data.id;
+    var valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    if (!valid) {
+        return res.status(401).json({
+            response_time: Date.now() - req.start,
+            message: "Invalid Project ID",
+        });
+    }
+    ProjectModel.findOneAndRemove(
+        { owner: user_id, _id: req.params.id },
+        function (err) {
+            if (err) return res.status(401).json({
+                response_time: Date.now() - req.start,
+                data: [],
+                message: "Something went wrong",
+                error: {
+                    status: true,
+                    message: err.message,
+                }
+            });
+            res.status(200).json({
+                response_time: Date.now() - req.start,
+                message: "Project Removed",
+                data: [],
+            });
+        });
+}
 module.exports = {
     create: createProject,
     update: updateProject,
     list: listProjects,
     find: findProjects,
+    remove: removeProject
 }
