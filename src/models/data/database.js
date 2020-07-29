@@ -10,11 +10,6 @@ const DatabaseSchema = Schema(
             required: true,
             select: false,
         },
-        __project__: {
-            type: String,
-            required: true,
-            select: false,
-        },
         __endpoint__: {
             type: String,
             required: true,

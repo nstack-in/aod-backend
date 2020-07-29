@@ -31,10 +31,6 @@ const ProjectSchema = Schema(
             name: { type: String, required: true },
             token: { type: String, required: true }
         }],
-        model: [{
-            id: String,
-
-        }],
         shared_with: {
             type: [{
                 user_id: String,
