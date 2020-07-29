@@ -87,7 +87,7 @@ function listEndpoint(req, res) {
             });
         return res.status(200).json({
             response_time: Date.now() - req.start,
-            message: "Invalid Project ID",
+            message: "LIST ENDPOINT ",
             data: data,
             error: {
                 status: false,
