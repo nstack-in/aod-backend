@@ -77,6 +77,10 @@ const EndpointSchema = Schema(
                 key: String
             }
         },
+        structured: {
+            type: Boolean,
+            required: true
+        },
         models: [{
             name: { type: String, required: true },
             type: { type: String, required: true },
