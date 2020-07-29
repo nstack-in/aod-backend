@@ -5,16 +5,25 @@ const mongoose = require('mongoose')
 function createProject(req, res) {
     req.body.owner = req.headers['user'].data.id;
     ProjectModel(req.body).save(function (err, data) {
-        if (err) return res.json({
+        if (err) return res.status(403).json({
             response_time: Date.now() - req.start,
             data: [],
             message: "Something went wrong",
-            error: err.message,
+            error: {
+                code: err.code,
+                status: true,
+                message: err.message,
+            },
         });
         res.status(201).json({
             response_time: Date.now() - req.start,
             message: "Project Created",
-            data: data
+            data: data,
+            error: {
+                code: "",
+                status: false,
+                message: "",
+            },
         });
     });
 
