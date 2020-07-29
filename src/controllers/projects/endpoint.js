@@ -60,8 +60,44 @@ function findEndpoint(req, res) {
         return res.status(200).json(data);
     });
 }
+function listEndpoint(req, res) {
+    let user_id = req.headers['user'].data.id
+    let project_id = req.params.pid;
+
+    let __owner__ = user_id;
+    let __project__ = project_id;
+
+    var valid = mongoose.Types.ObjectId.isValid(__project__);
+
+    if (!valid) {
+        return res.status(401).json({
+            response_time: Date.now() - req.start,
+            message: "Invalid Project ID",
+        });
+    }
+
+    EndpointModel.find({ __project__, __owner__ }, function (err, data) {
+        if (err)
+            return res.status(401).json({
+                response_time: Date.now() - req.start,
+                message: "Project Not Available in Db",
+                error: {
+                    status: true,
+                }
+            });
+        return res.status(200).json({
+            response_time: Date.now() - req.start,
+            message: "Invalid Project ID",
+            data: data,
+            error: {
+                status: false,
+            }
+        });
+    });
+}
 module.exports = {
     createEndpoint: createEndpoint,
     deleteEndpoint: deleteEndpoint,
-    findEndpoint: findEndpoint
+    findEndpoint: findEndpoint,
+    listEndpoint: listEndpoint
 }
