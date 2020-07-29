@@ -1,4 +1,5 @@
 const projectRoutes = require('express').Router();
+const { createEndpoint, deleteEndpoint, findEndpoint } = require('../../controllers/projects/endpoint');
 const { create, list, find, update, remove } = require('../../controllers/projects');
 
 projectRoutes.get('/', function (req, res) {
@@ -10,8 +11,11 @@ projectRoutes.get('/', function (req, res) {
 
 projectRoutes.get('/list', list);
 projectRoutes.post('/new', create);
-projectRoutes.put('/:id', update);
-projectRoutes.get('/:id', find);
-projectRoutes.delete('/:id', remove);
+projectRoutes.put('/:pid', update);
+projectRoutes.get('/:pid', find);
+projectRoutes.delete('/:pid', remove);
+projectRoutes.post('/:pid/new', createEndpoint);
+projectRoutes.get('/:pid/:eid', findEndpoint);
+projectRoutes.delete('/:pid/:eid', deleteEndpoint);
 
 module.exports = projectRoutes;

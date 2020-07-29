@@ -5,6 +5,7 @@ const Model = mongoose.model;
 
 const ProjectSchema = Schema(
     {
+        __version__: String,
         project: {
             type: String,
             required: true,
@@ -23,7 +24,8 @@ const ProjectSchema = Schema(
         }]
     },
     {
-        timestamps: true
+        timestamps: true,
+        versionKey: false
     }
 );
 

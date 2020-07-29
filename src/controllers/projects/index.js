@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 
 function createProject(req, res) {
-    req.body.owner = req.headers['user'].data.id;
+    req.body.__owner__ = req.headers['user'].data.id;
     ProjectModel(req.body).save(function (err, data) {
         if (err) return res.status(403).json({
             response_time: Date.now() - req.start,
@@ -31,32 +31,38 @@ function createProject(req, res) {
 
 function listProjects(req, res) {
     let user_id = req.headers['user'].data.id;
-    ProjectModel.find({ owner: user_id }, function (err, data) {
+    ProjectModel.find({ __owner__: user_id }, function (err, data) {
         if (err) return res.json({
             response_time: Date.now() - req.start,
             data: [],
             message: "Project Not Found",
-            error: err.message,
+            status: {
+                type: "ERROR",
+            },
         });
         res.status(200).json({
             response_time: Date.now() - req.start,
             message: "List of Created Project",
-            data: data
+            data: data,
+            status: {
+                type: "SUCCESS",
+            },
         });
     });
 
 }
 
 function findProjects(req, res) {
+    console.log(req.params)
     let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
     if (!valid) {
         return res.status(401).json({
             response_time: Date.now() - req.start,
             message: "Invalid Project ID",
         });
     }
-    ProjectModel.findOne({ owner: user_id, _id: req.params.id }, function (err, data) {
+    ProjectModel.findOne({ __owner__: user_id, _id: req.params.pid }, function (err, data) {
         if (err) return res.json({
             response_time: Date.now() - req.start,
             data: [],
@@ -74,7 +80,7 @@ function findProjects(req, res) {
 
 function updateProject(req, res) {
     let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
     if (!valid) {
         return res.status(401).json({
             response_time: Date.now() - req.start,
@@ -82,9 +88,9 @@ function updateProject(req, res) {
         });
     }
     let update = (({ name, description }) => ({ name, description }))(req.body);
-    update.owner = req.headers['user'].data.id;
+    update.__owner__ = req.headers['user'].data.id;
     ProjectModel.findOneAndUpdate(
-        { owner: user_id, _id: req.params.id },
+        { __owner__: user_id, _id: req.params.pid },
         update,
         { new: true },
         function (err, data) {
@@ -106,7 +112,7 @@ function updateProject(req, res) {
 }
 function removeProject(req, res) {
     let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
     if (!valid) {
         return res.status(401).json({
             response_time: Date.now() - req.start,
@@ -114,7 +120,7 @@ function removeProject(req, res) {
         });
     }
     ProjectModel.findOneAndRemove(
-        { owner: user_id, _id: req.params.id },
+        { __owner__: user_id, _id: req.params.pid },
         function (err) {
             if (err) return res.status(401).json({
                 response_time: Date.now() - req.start,

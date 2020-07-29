@@ -5,7 +5,8 @@ const Model = mongoose.model;
 
 const ProjectSchema = Schema(
     {
-        owner: {
+        __version__: String,
+        __owner__: {
             type: String,
             required: true,
             select: false,
@@ -16,7 +17,20 @@ const ProjectSchema = Schema(
         },
         description: {
             type: String,
+
         },
+        private: {
+            type: Boolean,
+            required: true
+        },
+        secure: {
+            type: Boolean,
+            required: true
+        },
+        keys: [{
+            name: { type: String, required: true },
+            token: { type: String, required: true }
+        }],
         model: [{
             id: String,
 
@@ -30,7 +44,8 @@ const ProjectSchema = Schema(
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        versionKey: false
     }
 );
 
@@ -40,8 +55,8 @@ function shareLimit(val) {
 
 var Project = Model('project', ProjectSchema);
 
-ProjectSchema.path('owner').validate(async (value) => {
-    const projectCount = await Project.countDocuments({ owner: value });
+ProjectSchema.path('__owner__').validate(async (value) => {
+    const projectCount = await Project.countDocuments({ __owner___: value });
     return projectCount < 3;
 }, 'You have limit of 3 projects');
 
