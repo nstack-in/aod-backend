@@ -1,4 +1,5 @@
 const EndpointModel = require('../../models/projects/endpoint');
+const ProjectModel = require('../../models/projects/project');
 const mongoose = require('mongoose')
 
 function createEndpoint(req, res) {
@@ -12,9 +13,25 @@ function createEndpoint(req, res) {
     console.log(req.params)
     console.log(req.body)
     EndpointModel(req.body).save(function (err, data) {
-        if (err)
-            return res.status(401).json(err);
-        return res.status(201).json(data);
+        if (err) {
+            return res.status(401).json({ type: 45, err });
+        }
+        else {
+            ProjectModel.findOneAndUpdate(
+                { _id: project_id },
+                { $push: { endpoints: data._id } },
+                { new: true }, function (err, data) {
+                    if (err) {
+                        return res.status(401).json({ type: 3, err });
+                    } else {
+                        return res.status(201).json({
+                            response_time: Date.now() - req.start,
+                            message: "Create Endpoints",
+                            data: data,
+                        });
+                    }
+                });
+        }
     });
 }
 
