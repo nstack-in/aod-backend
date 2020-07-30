@@ -15,13 +15,26 @@ function insertDataController(req, res) {
                     status: true,
                     message: "Invalid Endpoint ID"
                 },
-                data: data
+                data: []
             });
         req.body.__endpoint__ = data.id;
         DatabaseModel(req.body).save(function (err, data) {
             if (err)
-                return res.status(401).json(err);
-            return res.status(201).json(data);
+                return res.status(401).json({
+                    error: {
+                        message: err,
+                        status: true,
+                    }
+                });
+            return res.status(201).json({
+                response_time: `${Date.now() - req.start}ms`,
+                message: "Data Inserted",
+                data,
+                error: {
+                    message: "",
+                    status: false,
+                }
+            });
         });
     })
 
@@ -55,7 +68,11 @@ function getDataController(req, res) {
             .then((result, err) => {
                 if (err)
                     return res.status(401).json({ result, err });
-                return res.status(201).json({ err, result });
+                return res.status(201).json({
+                    response_time: `${Date.now() - req.start}ms`,
+                    message: "GET LIST OF DATA",
+                    data: result
+                });
             });
     });
 }
@@ -67,19 +84,31 @@ function removeDataController(req, res) {
 
     let filter = {
         __project__: project_id,
-        __endpoint__: endpoint_id,
         _id: document_id
     };
-    DatabaseModel
-        .findOneAndRemove(filter, (err, data) => {
-            if (err)
-                return res.status(401).json({ result, err });
-            return res.status(202).json({
-                response_time: Date.now() - req.start,
-                message: "Endpoint Data updated",
+    Endpoint.findOne({ __project__: project_id, endpoint_id: endpoint_id }, function (err, data) {
+        if (!data)
+            return res.status(401).json({
+                message: "No Endpoint found with this name",
+                error: {
+                    status: true,
+                    message: "Invalid Endpoint ID"
+                },
                 data: data
             });
-        });
+        filter['__endpoint__'] = data.id;
+        DatabaseModel
+            .findOneAndRemove(filter, (err, data) => {
+                if (err)
+                    return res.status(401).json({ result, err });
+                return res.status(202).json({
+                    response_time: `${Date.now() - req.start}ms`,
+                    message: "Endpoint Data updated",
+                    data: data
+                });
+            });
+    });
+
 }
 
 function updateDataController(req, res) {
@@ -102,7 +131,7 @@ function updateDataController(req, res) {
         { new: true },
         function (err, data) {
             if (err) return res.json({
-                response_time: Date.now() - req.start,
+                response_time: `${Date.now() - req.start}ms`,
                 data: [],
                 message: "Something went wrong",
                 error: {
@@ -111,7 +140,7 @@ function updateDataController(req, res) {
             });
             res.status(200).json({
 
-                response_time: Date.now() - req.start,
+                response_time: `${Date.now() - req.start}ms`,
                 message: "Endpoint Data updated",
                 data: data
             });
@@ -130,7 +159,7 @@ function findDataController(req, res) {
 
     DatabaseModel.findOne(filter, function (err, data) {
         if (err) return res.json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             data: [],
             message: "Something went wrong",
             error: {
@@ -138,7 +167,7 @@ function findDataController(req, res) {
             }
         });
         res.status(200).json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             message: "GET BY ID",
             data: data
         });

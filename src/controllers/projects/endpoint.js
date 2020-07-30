@@ -22,7 +22,7 @@ function createEndpoint(req, res) {
                         return res.status(401).json({ type: 3, err });
                     } else {
                         return res.status(201).json({
-                            response_time: Date.now() - req.start,
+                            response_time: `${Date.now() - req.start}ms`,
                             message: "Create Endpoints",
                             data: data,
                         });
@@ -43,7 +43,7 @@ function deleteEndpoint(req, res) {
     var valid = mongoose.Types.ObjectId.isValid(_id);
     if (!valid) {
         return res.status(401).json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             message: "Invalid Project ID",
         });
     }
@@ -64,7 +64,7 @@ function findEndpoint(req, res) {
     var valid = mongoose.Types.ObjectId.isValid(_id);
     if (!valid) {
         return res.status(401).json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             message: "Invalid Project ID",
         });
     }
@@ -85,7 +85,7 @@ function listEndpoint(req, res) {
 
     if (!valid) {
         return res.status(401).json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             message: "Invalid Project ID",
         });
     }
@@ -93,14 +93,14 @@ function listEndpoint(req, res) {
     EndpointModel.find({ __project__, __owner__ }, function (err, data) {
         if (err)
             return res.status(401).json({
-                response_time: Date.now() - req.start,
+                response_time: `${Date.now() - req.start}ms`,
                 message: "Project Not Available in Db",
                 error: {
                     status: true,
                 }
             });
         return res.status(200).json({
-            response_time: Date.now() - req.start,
+            response_time: `${Date.now() - req.start}ms`,
             message: "LIST ENDPOINT ",
             data: data,
             error: {
