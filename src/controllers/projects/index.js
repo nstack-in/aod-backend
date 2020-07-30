@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 
 function createProject(req, res) {
     req.body.__owner__ = req.headers['user'].data.id;
+    req.body.__version__ = global.version;
+
     ProjectModel(req.body).save(function (err, data) {
         if (err) return res.status(403).json({
             response_time: Date.now() - req.start,

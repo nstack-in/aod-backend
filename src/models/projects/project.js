@@ -5,7 +5,11 @@ const Model = mongoose.model;
 
 const ProjectSchema = Schema(
     {
-        __version__: String,
+        __version__: {
+            type: String,
+            required: true,
+            select: false,
+        },
         __owner__: {
             type: Schema.Types.ObjectId,
             required: true,

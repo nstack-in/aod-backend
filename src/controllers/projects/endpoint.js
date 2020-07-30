@@ -8,6 +8,7 @@ function createEndpoint(req, res) {
 
     req.body.__project__ = project_id;
     req.body.__owner__ = user_id;
+    req.body.__version__ = global.version;
 
     EndpointModel(req.body).save(function (err, data) {
         if (err) {

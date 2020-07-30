@@ -6,7 +6,7 @@ function insertDataController(req, res) {
     let endpoint_id = req.params.eid;
 
     req.body.__project__ = project_id;
-    req.body.__version__ = global.version;
+
     Endpoint.findOne({ endpoint_id }, function (err, data) {
         req.body.__endpoint__ = data.id;
         DatabaseModel(req.body).save(function (err, data) {
