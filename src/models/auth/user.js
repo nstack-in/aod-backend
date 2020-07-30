@@ -34,7 +34,7 @@ const UserSchema = Schema(
     }
 );
 
-var User = Model('user', UserSchema);
+var User = Model('User', UserSchema);
 
 
 UserSchema.path('email').validate(async (value) => {

@@ -6,7 +6,8 @@ const Model = mongoose.model;
 const DatabaseSchema = Schema(
     {
         __project__: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "Project",
             required: true,
             select: false,
         },

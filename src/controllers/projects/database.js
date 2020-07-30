@@ -1,18 +1,21 @@
 const DatabaseModel = require('../../models/data/database');
+const Endpoint = require('../../models/projects/endpoint');
 
 function insertDataController(req, res) {
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
 
     req.body.__project__ = project_id;
-    req.body.__endpoint__ = endpoint_id;
     req.body.__version__ = global.version;
+    Endpoint.findOne({ endpoint_id }, function (err, data) {
+        req.body.__endpoint__ = data.id;
+        DatabaseModel(req.body).save(function (err, data) {
+            if (err)
+                return res.status(401).json(err);
+            return res.status(201).json(data);
+        });
+    })
 
-    DatabaseModel(req.body).save(function (err, data) {
-        if (err)
-            return res.status(401).json(err);
-        return res.status(201).json(data);
-    });
 }
 
 function getDataController(req, res) {

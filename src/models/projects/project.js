@@ -7,9 +7,10 @@ const ProjectSchema = Schema(
     {
         __version__: String,
         __owner__: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
             select: false,
+            ref: "User"
         },
         name: {
             type: String,
@@ -27,7 +28,7 @@ const ProjectSchema = Schema(
             type: Boolean,
             required: true
         },
-        endpoints : [{
+        endpoints: [{
             type: Schema.Types.ObjectId,
             ref: "Endpoint"
         }],

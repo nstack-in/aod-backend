@@ -11,9 +11,15 @@ const EndpointSchema = Schema(
             select: false,
         },
         __owner__: {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
             select: false,
+            ref: "User"
+        },
+        endpoint_id: {
+            type: String,
+            select: false,
+            required: true,
         },
         __project__: {
             type: String,
@@ -97,7 +103,7 @@ const EndpointSchema = Schema(
         versionKey: false
     }
 );
-
+EndpointSchema.index({ endpoint_id: 1, __owner__: 1, __project__: 1 }, { unique: true });
 var Endpoint = Model('Endpoint', EndpointSchema);
 
 module.exports = Endpoint;

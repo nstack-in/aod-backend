@@ -8,15 +8,11 @@ function createEndpoint(req, res) {
 
     req.body.__project__ = project_id;
     req.body.__owner__ = user_id;
-    // req.body.__version__ = global.version;
 
-    console.log(req.params)
-    console.log(req.body)
     EndpointModel(req.body).save(function (err, data) {
         if (err) {
             return res.status(401).json({ type: 45, err });
-        }
-        else {
+        } else {
             ProjectModel.findOneAndUpdate(
                 { _id: project_id },
                 { $push: { endpoints: data._id } },
@@ -116,5 +112,6 @@ module.exports = {
     createEndpoint: createEndpoint,
     deleteEndpoint: deleteEndpoint,
     findEndpoint: findEndpoint,
-    listEndpoint: listEndpoint
+    listEndpoint: listEndpoint,
+    verifyEndpoint: verifyEndpoint
 }
