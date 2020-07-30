@@ -18,7 +18,6 @@ const EndpointSchema = Schema(
         },
         endpoint_id: {
             type: String,
-            select: false,
             required: true,
         },
         __project__: {
