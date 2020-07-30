@@ -41,7 +41,7 @@ function register(req, res) {
 function verify(req, res) {
     res.status(200).json({
         response_time: Date.now() - req.start,
-        data: req.headers ,
+        data: req.headers['user'] ,
         "error": {
             status: false,
             message: ""
