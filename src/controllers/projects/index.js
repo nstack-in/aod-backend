@@ -62,19 +62,21 @@ function findProjects(req, res) {
             message: "Invalid Project ID",
         });
     }
-    ProjectModel.findOne({ __owner__: user_id, _id: req.params.pid }, function (err, data) {
-        if (err) return res.json({
-            response_time: Date.now() - req.start,
-            data: [],
-            message: "Something went wrong",
-            error: err.message,
+    ProjectModel.findOne({ __owner__: user_id, _id: req.params.pid })
+        .populate("endpoints")
+        .then(function (data) {
+            // if (err) return res.json({
+            //     response_time: Date.now() - req.start,
+            //     data: [],
+            //     message: "Something went wrong",
+            //     error: err.message,
+            // });
+            res.status(200).json({
+                response_time: Date.now() - req.start,
+                message: "Project By ID",
+                data: data
+            });
         });
-        res.status(200).json({
-            response_time: Date.now() - req.start,
-            message: "Project By ID",
-            data: data
-        });
-    });
 
 }
 
