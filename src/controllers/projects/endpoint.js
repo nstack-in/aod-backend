@@ -40,14 +40,14 @@ function deleteEndpoint(req, res) {
     let __owner__ = user_id;
     let __project__ = project_id;
     let _id = endpoint_id;
-    var valid = mongoose.Types.ObjectId.isValid(_id);
-    if (!valid) {
-        return res.status(401).json({
-            response_time: `${Date.now() - req.start}ms`,
-            message: "Invalid Project ID",
-        });
-    }
-    EndpointModel.findOneAndDelete({ __project__, __owner__, _id }, function (err, data) {
+    // var valid = mongoose.Types.ObjectId.isValid(_id);
+    // if (!valid) {
+    //     return res.status(401).json({
+    //         response_time: `${Date.now() - req.start}ms`,
+    //         message: "Invalid Project ID",
+    //     });
+    // }
+    EndpointModel.findOneAndDelete({ __project__, __owner__, endpoint_id: _id }, function (err, data) {
         if (err)
             return res.status(401).json(err);
         return res.status(205).json(data);
