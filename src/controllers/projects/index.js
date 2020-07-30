@@ -31,15 +31,15 @@ function createProject(req, res) {
 
 function listProjects(req, res) {
     let user_id = req.headers['user'].data.id;
-    ProjectModel.find({ __owner__: user_id }, function (err, data) {
-        if (err) return res.json({
-            response_time: Date.now() - req.start,
-            data: [],
-            message: "Project Not Found",
-            status: {
-                type: "ERROR",
-            },
-        });
+    ProjectModel.find({ __owner__: user_id }).populate("endpoints").then(function (data) {
+        // if (err) return res.json({
+        //     response_time: Date.now() - req.start,
+        //     data: [],
+        //     message: "Project Not Found",
+        //     status: {
+        //         type: "ERROR",
+        //     },
+        // });
         res.status(200).json({
             response_time: Date.now() - req.start,
             message: "List of Created Project",
