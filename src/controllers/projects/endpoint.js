@@ -113,5 +113,4 @@ module.exports = {
     deleteEndpoint: deleteEndpoint,
     findEndpoint: findEndpoint,
     listEndpoint: listEndpoint,
-    verifyEndpoint: verifyEndpoint
 }
