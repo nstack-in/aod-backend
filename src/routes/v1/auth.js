@@ -12,4 +12,7 @@ userRoutes.post('/login', login);
 
 userRoutes.post('/register', register);
 
+userRoutes.get('/verify', verify);
+userRoutes.post('/verify', verify);
+
 module.exports = userRoutes;

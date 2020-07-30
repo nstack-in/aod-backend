@@ -16,7 +16,10 @@ function register(req, res) {
                 response_time: Date.now() - req.start,
                 "message": "Error",
                 "data": [],
-                "error": err.message,
+                "error": {
+                    status: true,
+                    message:err.message
+                },
             });
         } else {
             res.status(200).json(
@@ -24,7 +27,10 @@ function register(req, res) {
                     response_time: Date.now() - req.start,
                     "status": "User Created Successfully",
                     "data": data,
-                    "error": [],
+                    "error": {
+                        status: false,
+                        message: ""
+                    },
                 }
             );
         }
@@ -33,10 +39,13 @@ function register(req, res) {
 }
 
 function verify(req, res) {
-
     res.status(200).json({
         response_time: Date.now() - req.start,
-        "status": "working",
+        data: req.headers['user'] ,
+        "error": {
+            status: false,
+            message: ""
+        },
     })
 }
 
