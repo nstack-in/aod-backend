@@ -8,6 +8,15 @@ function insertDataController(req, res) {
     req.body.__project__ = project_id;
 
     Endpoint.findOne({ endpoint_id }, function (err, data) {
+        if (!data)
+            return res.status(401).json({
+                message: "No Endpoint found with this name",
+                error: {
+                    status: true,
+                    message: "Invalid Endpoint ID"
+                },
+                data: data
+            });
         req.body.__endpoint__ = data.id;
         DatabaseModel(req.body).save(function (err, data) {
             if (err)
@@ -28,16 +37,27 @@ function getDataController(req, res) {
 
     let filter = {}
     filter.__project__ = project_id;
-    filter.__endpoint__ = endpoint_id;
-    DatabaseModel
-        .find(filter)
-        .limit(resultsPerPage)
-        .skip(resultsPerPage * page)
-        .then((result, err) => {
-            if (err)
-                return res.status(401).json({ result, err });
-            return res.status(201).json({ err, result });
-        });
+    Endpoint.findOne({ endpoint_id: endpoint_id }, function (err, data) {
+        if (err || !data)
+            return res.status(401).json({
+                message: "No Endpoint found with this name",
+                error: {
+                    status: true,
+                    message: "Invalid Endpoint ID"
+                },
+                data: data
+            });
+        filter.__endpoint__ = data.id;
+        DatabaseModel
+            .find(filter)
+            .limit(resultsPerPage)
+            .skip(resultsPerPage * page)
+            .then((result, err) => {
+                if (err)
+                    return res.status(401).json({ result, err });
+                return res.status(201).json({ err, result });
+            });
+    });
 }
 
 function removeDataController(req, res) {
