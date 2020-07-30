@@ -103,6 +103,7 @@ const EndpointSchema = Schema(
     }
 );
 EndpointSchema.index({ endpoint_id: 1, __owner__: 1, __project__: 1 }, { unique: true });
+
 var Endpoint = Model('Endpoint', EndpointSchema);
 
 module.exports = Endpoint;
