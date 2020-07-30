@@ -94,6 +94,6 @@ const EndpointSchema = Schema(
     }
 );
 
-var Endpoint = Model('endpoint', EndpointSchema);
+var Endpoint = Model('Endpoint', EndpointSchema);
 
 module.exports = Endpoint;

@@ -27,6 +27,10 @@ const ProjectSchema = Schema(
             type: Boolean,
             required: true
         },
+        endpoints : [{
+            type: Schema.Types.ObjectId,
+            ref: "Endpoint"
+        }],
         keys: [{
             name: { type: String, required: true },
             token: { type: String, required: true }
@@ -49,7 +53,7 @@ function shareLimit(val) {
     return val.length < 2;
 }
 
-var Project = Model('project', ProjectSchema);
+var Project = Model('Project', ProjectSchema);
 
 ProjectSchema.path('__owner__').validate(async (value) => {
     const projectCount = await Project.countDocuments({ __owner___: value });

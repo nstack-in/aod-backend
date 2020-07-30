@@ -11,7 +11,8 @@ const DatabaseSchema = Schema(
             select: false,
         },
         __endpoint__: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "Endpoint",
             required: true,
             select: false,
         },
@@ -24,6 +25,6 @@ const DatabaseSchema = Schema(
 
 DatabaseSchema.index({ __owner__: 1, __endpoint__: 1 });
 
-var Endpoint = Model('db', DatabaseSchema);
+var Database = Model('Database', DatabaseSchema);
 
-module.exports = Endpoint;
+module.exports = Database;
