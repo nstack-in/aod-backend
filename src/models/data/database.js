@@ -19,11 +19,11 @@ const DatabaseSchema = Schema(
     },
     {
         versionKey: false,
-        timestamps: true, strict: false,
+        timestamps: false, strict: false,
     }
 );
 
-DatabaseSchema.index({ __owner__: 1, __endpoint__: 1 });
+DatabaseSchema.index({ __project__: 1, __endpoint__: 1 });
 
 var Database = Model('Database', DatabaseSchema);
 
