@@ -43,7 +43,7 @@ function deleteEndpoint(req, res) {
 
     let __owner__ = user_id;
     let __project__ = project_id;
-    let _id = endpoint_id;
+    let _id = endpoint_id.split(' ').join('-');
     // var valid = mongoose.Types.ObjectId.isValid(_id);
     // if (!valid) {
     //     return res.status(401).json({
