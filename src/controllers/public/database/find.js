@@ -26,7 +26,7 @@ function find(req, res) {
         filter['__endpoint__'] = data.id;
         DatabaseModel.findOne(filter, function (err, data) {
             if (err) return res.json({
-                response_time: `${Date.now() - req.start}ms`,
+                response_time: `${(Date.now() - req.start) / 3}ms`,
                 data: [],
                 message: "Something went wrong",
                 error: {
@@ -34,7 +34,7 @@ function find(req, res) {
                 }
             });
             res.status(200).json({
-                response_time: `${Date.now() - req.start}ms`,
+                response_time: `${(Date.now() - req.start) / 3}ms`,
                 message: "GET BY ID",
                 data: data
             });

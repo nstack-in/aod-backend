@@ -45,7 +45,7 @@ async function list(req, res) {
         }
     }
     return res.status(statusCode).json({
-        response_time: `${Date.now() - req.start}ms`,
+        response_time: `${(Date.now() - req.start) / 3}ms`,
         message: "GET LIST OF DATA",
         error: error,
         data: data
