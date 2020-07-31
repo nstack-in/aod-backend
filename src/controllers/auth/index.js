@@ -29,7 +29,8 @@ function register(req, res) {
                     "data": data,
                     "error": {
                         status: false,
-                        message: ""
+                        message: null,
+                        code: 0
                     },
                 }
             );
@@ -42,9 +43,10 @@ function verify(req, res) {
     res.status(200).json({
         response_time: `${(Date.now() - req.start) % 200}ms`,
         data: req.headers['user']['data'],
-        "error": {
+        error: {
             status: false,
-            message: ""
+            message: null,
+            code: 0
         },
     })
 }

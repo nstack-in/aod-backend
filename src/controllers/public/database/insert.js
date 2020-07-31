@@ -2,48 +2,85 @@ const DatabaseModel = require('../../../models/database');
 const Endpoint = require('../../../models/endpoint');
 
 async function insert(req, res) {
+    let data = [];
+    let statusCode = 200;
+    let error = {
+        status: false,
+        message: null,
+        code: 00,
+    };
+
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
-
     req.body.__project__ = project_id;
 
-    // let data = await Endpoint.findOne({ endpoint_id });
-    // console.log({ data });
+    let endpoint = await Endpoint.findOne({
+        endpoint_id, __project__: project_id
+    });
 
-    Endpoint.findOne({ endpoint_id }, function (err, data) {
-        if (!data)
-            return res.status(401).json({
-                message: "No Endpoint found with this name",
-                error: {
-                    status: true,
-                    message: "Invalid Endpoint ID"
-                },
-                data: []
-            });
-        req.body.__endpoint__ = data.id;
-        DatabaseModel(req.body).save(function (err, data) {
-            if (err)
-                return res.status(401).json({
-                    error: {
-                        message: err,
-                        status: true,
-                    }
-                });
-            delete data.__project__;
-            delete data.__endpoint__;
-            return res.status(201).json({
-                server_response_time: `${(Date.now() - req.start) % 200}ms`,
-                message: "Data Inserted",
-                data: data,
-                error: {
-                    message: "",
-                    status: false,
-                }
-            });
-        });
-    })
+
+    if (endpoint) {
+        req.body.__endpoint__ = endpoint.id;
+        let verification = verifyData(endpoint, req.body);
+        if (verification.err.status) {
+            statusCode = 403;
+            error = verification.err;
+            data = null;
+        } else {
+            statusCode = 201;
+            data = await DatabaseModel(verification.data).save();
+        }
+    } else if (!endpoint) {
+        statusCode = 201;
+        error = {
+            status: true,
+            message: 'Invalid Endpoint',
+            code: 07,
+        };
+    } else if (!data) {
+        statusCode = 201;
+        error = {
+            status: true,
+            message: 'Could Not insert',
+            code: 012,
+        };
+    }
+    if (data) {
+        data = data._doc
+        delete data['__endpoint__']
+        delete data['__project__']
+    }
+    return res.status(statusCode).json({
+        message: "Data Inserted",
+        server_response_time: `${(Date.now() - req.start) % 200}ms`,
+        data: data,
+        error: error
+    });
 
 }
 
+
+function verifyData(endpoint, requested_data) {
+    let data = {};
+    let error = {};
+    if (endpoint.structured) {
+        data = {};
+        error = {
+            status: true,
+            message: 'Invalid Format',
+            code: 18,
+        }
+    } else {
+        data = requested_data;
+        error = {
+            status: false,
+            message: null,
+            code: 0,
+        }
+    }
+
+    return { err: error, data: data };
+
+}
 
 module.exports = insert;

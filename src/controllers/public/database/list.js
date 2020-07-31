@@ -26,17 +26,14 @@ async function list(req, res) {
             .find(filter)
             .limit(resultsPerPage)
             .skip(resultsPerPage * page);
-    }
-
-    if (!endpoint) {
+    } else if (!endpoint) {
         statusCode = 402;
         error = {
             status: true,
             message: 'Invalid Endpoint',
             code: 07,
         }
-    }
-    if (!data) {
+    } else if (!data) {
         statusCode = 403;
         error = {
             status: true,

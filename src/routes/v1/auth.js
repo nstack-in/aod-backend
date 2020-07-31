@@ -2,7 +2,7 @@ const userRoutes = require('express').Router();
 const auth = require('../../controllers/auth');
 const authMiddleware = require('../../middleware/auth');
 
-userRoutes.get('/', function (req, res) {
+userRoutes.all('/', function (req, res) {
     res.status(200).json({
         "status": "This is auth routes",
         "response_time": Date.now() - req.start,

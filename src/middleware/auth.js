@@ -9,7 +9,7 @@ function authCheck(req, res, next) {
         res.status(401).json({
             message: "invalid token", data: [], error: {
                 message: "Token Expired",
-                code: "",
+                code: 78,
                 status: true,
             }
         });

@@ -26,9 +26,9 @@ function createProject(req, res) {
             message: "Project Created",
             data: data,
             error: {
-                code: "",
+                code: 0,
                 status: false,
-                message: "",
+                message: null,
             },
         });
     });

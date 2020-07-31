@@ -18,7 +18,6 @@ rootRoute.get('/health', function (req, res) {
     });
 });
 
-
 module.exports = {
     v1Route: v1Routes,
     rootRoute: rootRoute,

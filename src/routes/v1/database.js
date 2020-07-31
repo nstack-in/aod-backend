@@ -2,9 +2,16 @@ const projectRoutes = require('express').Router();
 const database = require('../../controllers/public/database');
 
 
-projectRoutes.get('/', function (req, res) {
+projectRoutes.all('/', function (req, res) {
     res.status(200).json({
         "status": "This is user data routes",
+        "response_time": Date.now() - req.start,
+    })
+});
+
+projectRoutes.all('/:pid', function (req, res) {
+    res.status(200).json({
+        "status": "This is project route",
         "response_time": Date.now() - req.start,
     })
 });
