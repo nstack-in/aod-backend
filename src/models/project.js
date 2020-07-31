@@ -5,6 +5,7 @@ const Model = mongoose.model;
 
 const ProjectSchema = Schema(
     {
+        _id: { type: String },
         __version__: {
             type: String,
             required: true,

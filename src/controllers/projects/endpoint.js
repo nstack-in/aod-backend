@@ -9,6 +9,10 @@ function createEndpoint(req, res) {
     req.body.__project__ = project_id;
     req.body.__owner__ = user_id;
     req.body.__version__ = global.version;
+    if (req.body.name != null)
+        req.endpoint_id = req.body.name.split(' ').join('-').toLocaleLowerCase();
+    else
+        req.endpoint_id = null;
 
     EndpointModel(req.body).save(function (err, data) {
         if (err) {

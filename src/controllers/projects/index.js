@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 function createProject(req, res) {
     req.body.__owner__ = req.headers['user'].data.id;
     req.body.__version__ = global.version;
+    if (req.body.name != "")
+        req.body._id = req.body.name.split(' ').join('-').toLocaleLowerCase();
 
     ProjectModel(req.body).save(function (err, data) {
         if (err) return res.status(403).json({
@@ -17,6 +19,7 @@ function createProject(req, res) {
                 message: err.message,
             },
         });
+
         res.status(201).json({
             response_time: `${Date.now() - req.start}ms`,
             message: "Project Created",
@@ -55,15 +58,7 @@ function listProjects(req, res) {
 }
 
 function findProjects(req, res) {
-    console.log(req.params)
     let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
-    if (!valid) {
-        return res.status(401).json({
-            response_time: `${Date.now() - req.start}ms`,
-            message: "Invalid Project ID",
-        });
-    }
     ProjectModel.findOne({ __owner__: user_id, _id: req.params.pid })
         .populate("endpoints")
         .then(function (data) {
@@ -85,12 +80,6 @@ function findProjects(req, res) {
 function updateProject(req, res) {
     let user_id = req.headers['user'].data.id;
     var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
-    if (!valid) {
-        return res.status(401).json({
-            response_time: `${Date.now() - req.start}ms`,
-            message: "Invalid Project ID",
-        });
-    }
     let update = (({ name, description }) => ({ name, description }))(req.body);
     update.__owner__ = req.headers['user'].data.id;
     ProjectModel.findOneAndUpdate(
@@ -116,13 +105,6 @@ function updateProject(req, res) {
 }
 function removeProject(req, res) {
     let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
-    if (!valid) {
-        return res.status(401).json({
-            response_time: `${Date.now() - req.start}ms`,
-            message: "Invalid Project ID",
-        });
-    }
     ProjectModel.findOneAndRemove(
         { __owner__: user_id, _id: req.params.pid },
         function (err) {
