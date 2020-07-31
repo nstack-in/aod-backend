@@ -1,6 +1,6 @@
 const projectRoutes = require('express').Router();
-const { createEndpoint, listEndpoint, deleteEndpoint, findEndpoint } = require('../../controllers/projects/endpoint');
-const { create, list, find, update, remove } = require('../../controllers/projects');
+const endpoint = require('../../controllers/projects/endpoint');
+const projects = require('../../controllers/projects');
 
 projectRoutes.get('/', function (req, res) {
     res.status(200).json({
@@ -9,15 +9,15 @@ projectRoutes.get('/', function (req, res) {
     })
 });
 
-projectRoutes.get('/list', list);
-projectRoutes.post('/new', create);
-projectRoutes.put('/:pid', update);
-projectRoutes.get('/:pid', find);
-projectRoutes.delete('/:pid', remove);
+projectRoutes.get('/list', projects.list);
+projectRoutes.post('/new', projects.create);
+projectRoutes.put('/:pid', projects.update);
+projectRoutes.get('/:pid', projects.find);
+projectRoutes.delete('/:pid', projects.remove);
 
-projectRoutes.get('/:pid/list', listEndpoint);
-projectRoutes.post('/:pid/new', createEndpoint);
-projectRoutes.get('/:pid/:eid', findEndpoint);
-projectRoutes.delete('/:pid/:eid', deleteEndpoint);
+projectRoutes.get('/:pid/list', endpoint.listEndpoint);
+projectRoutes.post('/:pid/new', endpoint.createEndpoint);
+projectRoutes.get('/:pid/:eid', endpoint.findEndpoint);
+projectRoutes.delete('/:pid/:eid', endpoint.deleteEndpoint);
 
 module.exports = projectRoutes;

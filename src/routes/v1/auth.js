@@ -1,5 +1,5 @@
 const userRoutes = require('express').Router();
-const { login, forget, register, verify } = require('../../controllers/auth');
+const auth = require('../../controllers/auth');
 const authMiddleware = require('../../middleware/auth');
 
 userRoutes.get('/', function (req, res) {
@@ -9,11 +9,10 @@ userRoutes.get('/', function (req, res) {
     })
 });
 
-userRoutes.post('/login', login);
+userRoutes.post('/login', auth.login);
+userRoutes.post('/register', auth.register);
 
-userRoutes.post('/register', register);
-
-userRoutes.get('/verify', [authMiddleware,verify]);
-userRoutes.post('/verify', [authMiddleware,verify]);
+userRoutes.get('/verify', [authMiddleware, auth.verify]);
+userRoutes.post('/verify', [authMiddleware, auth.verify]);
 
 module.exports = userRoutes;

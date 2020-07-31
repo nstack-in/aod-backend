@@ -1,5 +1,5 @@
 const projectRoutes = require('express').Router();
-const { findDataController, insertDataController, getDataController, updateDataController, removeDataController } = require('../../controllers/projects/database');
+const database = require('../../controllers/projects/database');
 
 
 projectRoutes.get('/', function (req, res) {
@@ -9,10 +9,10 @@ projectRoutes.get('/', function (req, res) {
     })
 });
 
-projectRoutes.get('/:pid/:eid', getDataController);
-projectRoutes.post('/:pid/:eid', insertDataController);
-projectRoutes.get('/:pid/:eid/:id', findDataController);
-projectRoutes.put('/:pid/:eid/:id', updateDataController);
-projectRoutes.delete('/:pid/:eid/:id', removeDataController);
+projectRoutes.get('/:pid/:eid', database.getDataController);
+projectRoutes.post('/:pid/:eid', database.insertDataController);
+projectRoutes.get('/:pid/:eid/:id', database.findDataController);
+projectRoutes.put('/:pid/:eid/:id', database.updateDataController);
+projectRoutes.delete('/:pid/:eid/:id', database.removeDataController);
 
 module.exports = projectRoutes;

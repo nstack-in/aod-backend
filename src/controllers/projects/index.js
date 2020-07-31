@@ -1,4 +1,4 @@
-const ProjectModel = require('../../models/projects/project');
+const ProjectModel = require('../../models/project');
 const mongoose = require('mongoose')
 
 

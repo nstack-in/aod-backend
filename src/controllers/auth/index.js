@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
-const UserModel = require('../../models/auth/user');
+const UserModel = require('../../models/user');
 
 function register(req, res) {
     let salt = crypto.randomBytes(16).toString('base64');

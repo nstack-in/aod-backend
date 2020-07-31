@@ -1,5 +1,5 @@
-const EndpointModel = require('../../models/projects/endpoint');
-const ProjectModel = require('../../models/projects/project');
+const EndpointModel = require('../../models/endpoint');
+const ProjectModel = require('../../models/project');
 const mongoose = require('mongoose')
 
 function createEndpoint(req, res) {

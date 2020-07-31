@@ -1,5 +1,5 @@
-const DatabaseModel = require('../../models/data/database');
-const Endpoint = require('../../models/projects/endpoint');
+const DatabaseModel = require('../../models/database');
+const Endpoint = require('../../models/endpoint');
 
 function insertDataController(req, res) {
     let project_id = req.params.pid;
