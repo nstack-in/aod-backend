@@ -1,5 +1,5 @@
 const projectRoutes = require('express').Router();
-const database = require('../../controllers/projects/database');
+const database = require('../../controllers/public/database');
 
 
 projectRoutes.get('/', function (req, res) {
