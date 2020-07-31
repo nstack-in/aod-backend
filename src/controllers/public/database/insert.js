@@ -2,12 +2,13 @@ const DatabaseModel = require('../../../models/database');
 const Endpoint = require('../../../models/endpoint');
 
 async function insert(req, res) {
-    let data = await Endpoint.findOne({ endpoint_id });
-    console.log({ data });
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
 
     req.body.__project__ = project_id;
+
+    // let data = await Endpoint.findOne({ endpoint_id });
+    // console.log({ data });
 
     Endpoint.findOne({ endpoint_id }, function (err, data) {
         if (!data)
