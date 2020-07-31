@@ -10,9 +10,9 @@ function createEndpoint(req, res) {
     req.body.__owner__ = user_id;
     req.body.__version__ = global.version;
     if (req.body.name != null)
-        req.endpoint_id = req.body.name.split(' ').join('-').toLocaleLowerCase();
+        req.body.endpoint_id = req.body.name.split(' ').join('-').toLocaleLowerCase();
     else
-        req.endpoint_id = null;
+        req.body.endpoint_id = null;
 
     EndpointModel(req.body).save(function (err, data) {
         if (err) {
@@ -43,7 +43,7 @@ function deleteEndpoint(req, res) {
 
     let __owner__ = user_id;
     let __project__ = project_id;
-    let _id = endpoint_id.split(' ').join('-');
+    let _id = endpoint_id;
     // var valid = mongoose.Types.ObjectId.isValid(_id);
     // if (!valid) {
     //     return res.status(401).json({
