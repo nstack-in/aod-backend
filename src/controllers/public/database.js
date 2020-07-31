@@ -103,7 +103,7 @@ function removeDataController(req, res) {
                     return res.status(401).json({ result, err });
                 return res.status(202).json({
                     response_time: `${Date.now() - req.start}ms`,
-                    message: "Endpoint Data updated",
+                    message: "Endpoint Data Deleted",
                     data: data
                 });
             });
@@ -122,7 +122,6 @@ function updateDataController(req, res) {
     };
 
     req.body.__project__ = project_id;
-    req.body.__endpoint__ = endpoint_id;
 
     Endpoint.findOne({ __project__: project_id, endpoint_id: endpoint_id }, function (err, data) {
         if (!data)
@@ -135,6 +134,7 @@ function updateDataController(req, res) {
                 data: data
             });
         filter['__endpoint__'] = data.id;
+        req.body.__endpoint__ = data.id;
         DatabaseModel.findOneAndUpdate(
             filter,
             req.body,
