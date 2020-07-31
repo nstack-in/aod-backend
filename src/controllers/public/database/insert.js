@@ -52,7 +52,7 @@ async function insert(req, res) {
     }
     return res.status(statusCode).json({
         message: "Data Inserted",
-        server_response_time: `${(Date.now() - req.start) % 200}ms`,
+        server_response_time: `${(Date.now() - req.start)}ms`,
         data: data,
         error: error
     });

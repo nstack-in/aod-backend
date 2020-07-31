@@ -42,10 +42,10 @@ async function list(req, res) {
         }
     }
     return res.status(statusCode).json({
-        response_time: `${(Date.now() - req.start) % 200}ms`,
+        response_time: `${(Date.now() - req.start)}ms`,
         message: "GET LIST OF DATA",
+        data: data,
         error: error,
-        data: data
     });
 
 }

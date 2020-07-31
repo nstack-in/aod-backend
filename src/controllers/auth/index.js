@@ -13,7 +13,7 @@ function register(req, res) {
     UserModel(req.body).save(function (err, data) {
         if (err) {
             res.status(400).json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 "message": "Error",
                 "data": [],
                 "error": {
@@ -24,7 +24,7 @@ function register(req, res) {
         } else {
             res.status(200).json(
                 {
-                    response_time: `${(Date.now() - req.start) % 200}ms`,
+                    response_time: `${(Date.now() - req.start)}ms`,
                     "status": "User Created Successfully",
                     "data": data,
                     "error": {
@@ -41,7 +41,7 @@ function register(req, res) {
 
 function verify(req, res) {
     res.status(200).json({
-        response_time: `${(Date.now() - req.start) % 200}ms`,
+        response_time: `${(Date.now() - req.start)}ms`,
         data: req.headers['user']['data'],
         error: {
             status: false,
@@ -56,7 +56,7 @@ function login(req, res) {
         .then((user, err) => {
             if (!user[0]) {
                 res.status(404).json({
-                    response_time: `${(Date.now() - req.start) % 200}ms`,
+                    response_time: `${(Date.now() - req.start)}ms`,
                     "message": "User Not Found",
                     "data": [],
                     "error": err,
@@ -94,7 +94,7 @@ function forget(req, res) {
 
     res.status(200).json({
         "status": "working",
-        response_time: `${(Date.now() - req.start) % 200}ms`
+        response_time: `${(Date.now() - req.start)}ms`
     })
 }
 

@@ -11,7 +11,7 @@ function createProject(req, res) {
 
     ProjectModel(req.body).save(function (err, data) {
         if (err) return res.status(403).json({
-            response_time: `${(Date.now() - req.start) % 200}ms`,
+            response_time: `${(Date.now() - req.start)}ms`,
             data: [],
             message: "Something went wrong",
             error: {
@@ -22,7 +22,7 @@ function createProject(req, res) {
         });
 
         res.status(201).json({
-            response_time: `${(Date.now() - req.start) % 200}ms`,
+            response_time: `${(Date.now() - req.start)}ms`,
             message: "Project Created",
             data: data,
             error: {
@@ -47,7 +47,7 @@ function listProjects(req, res) {
         //     },
         // });
         res.status(200).json({
-            response_time: `${(Date.now() - req.start) % 200}ms`,
+            response_time: `${(Date.now() - req.start)}ms`,
             message: "List of Created Project",
             data: data,
             status: {
@@ -70,7 +70,7 @@ function findProjects(req, res) {
             //     error: err.message,
             // });
             res.status(200).json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 message: "Project By ID",
                 data: data
             });
@@ -89,7 +89,7 @@ function updateProject(req, res) {
         { new: true },
         function (err, data) {
             if (err) return res.json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 data: [],
                 message: "Something went wrong",
                 error: {
@@ -97,7 +97,7 @@ function updateProject(req, res) {
                 }
             });
             res.status(200).json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 message: "Updated the Project",
                 data: data
             });
@@ -110,7 +110,7 @@ function removeProject(req, res) {
         { __owner__: user_id, _id: req.params.pid },
         function (err) {
             if (err) return res.status(401).json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 data: [],
                 message: "Something went wrong",
                 error: {
@@ -119,7 +119,7 @@ function removeProject(req, res) {
                 }
             });
             res.status(200).json({
-                response_time: `${(Date.now() - req.start) % 200}ms`,
+                response_time: `${(Date.now() - req.start)}ms`,
                 message: "Project Removed",
                 data: [],
             });
