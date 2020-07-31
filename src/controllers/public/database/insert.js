@@ -12,7 +12,6 @@ async function insert(req, res) {
 
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
-    req.body.__project__ = project_id;
 
     let endpoint = await Endpoint.findOne({
         endpoint_id, __project__: project_id
@@ -20,7 +19,6 @@ async function insert(req, res) {
 
 
     if (endpoint) {
-        req.body.__endpoint__ = endpoint.id;
         let verification = verifyData(endpoint, req.body);
         if (verification.err.status) {
             statusCode = 403;
@@ -28,6 +26,8 @@ async function insert(req, res) {
             data = null;
         } else {
             statusCode = 201;
+            verification.data.__endpoint__ = endpoint.id;
+            verification.data.__project__ = project_id;
             data = await DatabaseModel(verification.data).save();
         }
     } else if (!endpoint) {
@@ -64,12 +64,29 @@ function verifyData(endpoint, requested_data) {
     let data = {};
     let error = {};
     if (endpoint.structured) {
-        data = {};
-        error = {
-            status: true,
-            message: 'Invalid Format',
-            code: 18,
-        }
+        let override = false;
+        let fields = [];
+        let struct = endpoint.models;
+
+        struct.forEach(element => {
+            let capture = requested_data[element['name']];
+            if (capture == null) {
+                fields.push(element['name'])
+                override = true;
+            } else {
+                data[element['name']] = capture;
+            }
+        });
+        if (override)
+            error = {
+                status: true,
+                message: `Please fill required field: ${fields.join(', ')} `,
+                code: 18,
+            }; else error = {
+                status: false,
+                message: '',
+                code: 0,
+            };
     } else {
         data = requested_data;
         error = {

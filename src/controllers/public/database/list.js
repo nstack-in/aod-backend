@@ -22,6 +22,7 @@ async function list(req, res) {
         code: 00,
     };
     if (endpoint) {
+        filter.__endpoint__ = endpoint.id;
         data = await DatabaseModel
             .find(filter)
             .limit(resultsPerPage)
