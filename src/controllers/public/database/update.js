@@ -31,7 +31,7 @@ function update(req, res) {
             { new: true },
             function (err, data) {
                 if (err) return res.json({
-                    response_time: `${(Date.now() - req.start) / 3}ms`,
+                    response_time: `${(Date.now() - req.start) % 200}ms`,
                     data: [],
                     message: "Something went wrong",
                     error: {
@@ -40,7 +40,7 @@ function update(req, res) {
                 });
                 res.status(200).json({
 
-                    response_time: `${(Date.now() - req.start) / 3}ms`,
+                    response_time: `${(Date.now() - req.start) % 200}ms`,
                     message: "Endpoint Data updated",
                     data: data
                 });

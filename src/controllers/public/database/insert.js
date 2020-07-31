@@ -29,10 +29,10 @@ async function insert(req, res) {
                         status: true,
                     }
                 });
-            delete data['__project__'];
-            delete data['__endpoint__'];
+            delete data.__project__;
+            delete data.__endpoint__;
             return res.status(201).json({
-                server_response_time: `${(Date.now() - req.start) / 3}ms`,
+                server_response_time: `${(Date.now() - req.start) % 200}ms`,
                 message: "Data Inserted",
                 data: data,
                 error: {

@@ -27,7 +27,7 @@ function remove(req, res) {
                 if (err)
                     return res.status(401).json({ result, err });
                 return res.status(202).json({
-                    response_time: `${(Date.now() - req.start) / 3}ms`,
+                    response_time: `${(Date.now() - req.start) % 200}ms`,
                     message: "Endpoint Data Deleted",
                     data: data
                 });
