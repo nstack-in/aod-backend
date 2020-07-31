@@ -4,7 +4,7 @@ const database = require('../../controllers/public/database');
 
 projectRoutes.get('/', function (req, res) {
     res.status(200).json({
-        "status": "This is project routes",
+        "status": "This is user data routes",
         "response_time": Date.now() - req.start,
     })
 });

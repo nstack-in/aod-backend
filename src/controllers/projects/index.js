@@ -5,8 +5,9 @@ const mongoose = require('mongoose')
 function createProject(req, res) {
     req.body.__owner__ = req.headers['user'].data.id;
     req.body.__version__ = global.version;
+    let currentTime = Date.now();
     if (req.body.name != "")
-        req.body._id = req.body.name.split(' ').join('-').toLocaleLowerCase();
+        req.body._id = req.body.name.split(' ').join('-').toLocaleLowerCase() + '-' + currentTime;
 
     ProjectModel(req.body).save(function (err, data) {
         if (err) return res.status(403).json({
