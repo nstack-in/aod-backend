@@ -62,7 +62,7 @@ function shareLimit(val) {
 var Project = Model('Project', ProjectSchema);
 
 ProjectSchema.path('__owner__').validate(async (value) => {
-    const projectCount = await Project.countDocuments({ __owner___: value });
+    const projectCount = await Project.countDocuments({ __owner__: value });
     return projectCount < 3;
 }, 'You have limit of 3 projects');
 

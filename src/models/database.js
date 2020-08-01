@@ -24,7 +24,7 @@ const DatabaseSchema = Schema(
     }
 );
 
-DatabaseSchema.index({ __project__: 1, __endpoint__: 1 }, { unique: true });
+DatabaseSchema.index({ __project__: 1, __endpoint__: 1 }, { unique: false });
 
 var Database = Model('Database', DatabaseSchema);
 

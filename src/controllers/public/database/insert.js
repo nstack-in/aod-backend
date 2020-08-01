@@ -52,12 +52,12 @@ async function insert(req, res) {
             delete data['__project__']
         }
     } catch (err) {
-
+        console
         return res.status(statusCode).json({
             message: "Insertion Fail",
             server_response_time: `${(Date.now() - req.start)}ms`,
             data: null,
-            error: error
+            error: err
         });
     }
 
@@ -82,13 +82,11 @@ function verifyData(endpoint, requested_data) {
 
         struct.forEach(element => {
             let capture = requested_data[element['name']];
-            console.log(element['type'].toLowerCase() == typeof capture)
-            console.log({ a: element['type'], b: typeof capture })
-            if (element['type'].toLowerCase() != typeof capture) {
-                override = { code: 1, fields: `${element['name']} should be of ${element['type']} type` };
-            } else if (capture == null) {
+            if (capture == null) {
                 fields.push(element['name'])
-                override = { code: 2, fields: `All fields should must contain data` };;
+                override = { code: 1, fields: `All fields should must contain data` };;
+            } else if (element['type'].toLowerCase() != typeof capture && override.code == 0) {
+                override = { code: 2, fields: `${element['name']} should be of ${element['type']} type` };
             } else {
                 data[element['name']] = capture;
             }
@@ -96,14 +94,14 @@ function verifyData(endpoint, requested_data) {
         if (override.code == 1) {
             error = {
                 status: true,
-                message: override.fields,
-                code: 27,
+                message: `Please fill required field: ${fields.join(', ')} `,
+                code: 18,
             };
         } else if (override.code == 2) {
             error = {
                 status: true,
-                message: `Please fill required field: ${fields.join(', ')} `,
-                code: 18,
+                message: override.fields,
+                code: 27,
             };
         } else {
             error = {
