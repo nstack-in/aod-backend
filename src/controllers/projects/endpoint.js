@@ -2,10 +2,11 @@ const EndpointModel = require('../../models/endpoint');
 const ProjectModel = require('../../models/project');
 const mongoose = require('mongoose')
 
-function createEndpoint(req, res) {
+async function createEndpoint(req, res) {
+    let endpoint = null;
     let project_id = req.params.pid;
     let user_id = req.headers['user'].data.id
-
+    let statusCode = 0;
     req.body.__project__ = project_id;
     req.body.__owner__ = user_id;
     req.body.__version__ = global.version;
@@ -13,26 +14,42 @@ function createEndpoint(req, res) {
         req.body.endpoint_id = req.body.name.split(' ').join('-').toLocaleLowerCase();
     else
         req.body.endpoint_id = null;
+    try {
 
-    EndpointModel(req.body).save(function (err, data) {
-        if (err) {
-            return res.status(401).json({ type: 45, err });
-        } else {
-            ProjectModel.findOneAndUpdate(
+        endpoint = await EndpointModel(req.body).save();
+        await ProjectModel
+            .findOneAndUpdate(
                 { _id: project_id },
-                { $push: { endpoints: data._id } },
-                { new: true }, function (err, data) {
-                    if (err) {
-                        return res.status(401).json({ type: 3, err });
-                    } else {
-                        return res.status(201).json({
-                            response_time: `${(Date.now() - req.start)}ms`,
-                            message: "Create Endpoints",
-                            data: data,
-                        });
-                    }
-                });
-        }
+                { $push: { endpoints: endpoint._id } },
+                { new: true }
+            )
+
+    } catch (err) {
+        return res.status(403).json({
+            response_time: `${(Date.now() - req.start)}ms`,
+            message: "Something went wrong",
+            error: {
+                code: err.code,
+                message: 'Data Insertion Fail',
+                status: true,
+            },
+            data: null,
+        });
+    }
+    statusCode = 200;
+    let data = endpoint._doc;
+    delete data['__owner__']
+    delete data['__project__']
+    delete data['__version__']
+    return res.status(statusCode).json({
+        response_time: `${(Date.now() - req.start)}ms`,
+        message: "Create Endpoints",
+        data: data,
+        error: {
+            code: 0,
+            message: null,
+            status: false,
+        },
     });
 }
 
@@ -84,15 +101,6 @@ function listEndpoint(req, res) {
 
     let __owner__ = user_id;
     let __project__ = project_id;
-
-    var valid = mongoose.Types.ObjectId.isValid(__project__);
-
-    if (!valid) {
-        return res.status(401).json({
-            response_time: `${(Date.now() - req.start)}ms`,
-            message: "Invalid Project ID",
-        });
-    }
 
     EndpointModel.find({ __project__, __owner__ }, function (err, data) {
         if (err)

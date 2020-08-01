@@ -93,6 +93,7 @@ const EndpointSchema = Schema(
         models: [{
             name: { type: String, required: true },
             type: { type: String, required: true },
+            required: { type: Boolean, required: true, },
             max: { type: Number },
             _id: false
         }]

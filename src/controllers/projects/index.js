@@ -1,4 +1,5 @@
 const ProjectModel = require('../../models/project');
+const EndpointModel = require('../../models/endpoint');
 const mongoose = require('mongoose')
 
 
@@ -104,26 +105,29 @@ function updateProject(req, res) {
         });
 
 }
-function removeProject(req, res) {
+async function removeProject(req, res) {
     let user_id = req.headers['user'].data.id;
-    ProjectModel.findOneAndRemove(
-        { __owner__: user_id, _id: req.params.pid },
-        function (err) {
-            if (err) return res.status(401).json({
-                response_time: `${(Date.now() - req.start)}ms`,
-                data: [],
-                message: "Something went wrong",
-                error: {
-                    status: true,
-                    message: err.message,
-                }
-            });
-            res.status(200).json({
-                response_time: `${(Date.now() - req.start)}ms`,
-                message: "Project Removed",
-                data: [],
-            });
+    let project_id = req.params.pid;
+    try {
+        await EndpointModel.remove({ __project__: project_id, __owner__: user_id });
+        await ProjectModel.findOneAndRemove({ __owner__: user_id, _id: project_id });
+
+        res.status(200).json({
+            response_time: `${(Date.now() - req.start)}ms`,
+            message: "Project Removed",
+            data: [],
         });
+    } catch (error) {
+        return res.status(401).json({
+            response_time: `${(Date.now() - req.start)}ms`,
+            data: [],
+            message: "Something went wrong",
+            error: {
+                status: true,
+                message: error.message,
+            }
+        });
+    }
 }
 module.exports = {
     create: createProject,
