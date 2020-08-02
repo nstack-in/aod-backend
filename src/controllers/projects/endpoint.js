@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 async function createEndpoint(req, res) {
     let endpoint = null;
     let project_id = req.params.pid;
-    let user_id = req.headers['user'].data.id
+    let user_id = req.headers['user'].data._id
     let statusCode = 0;
     req.body.__project__ = project_id;
     req.body.__owner__ = user_id;
@@ -54,7 +54,7 @@ async function createEndpoint(req, res) {
 }
 
 function deleteEndpoint(req, res) {
-    let user_id = req.headers['user'].data.id
+    let user_id = req.headers['user'].data._id
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
 
@@ -75,7 +75,7 @@ function deleteEndpoint(req, res) {
     });
 }
 function findEndpoint(req, res) {
-    let user_id = req.headers['user'].data.id
+    let user_id = req.headers['user'].data._id
     let project_id = req.params.pid;
     let endpoint_id = req.params.eid;
 
@@ -96,7 +96,7 @@ function findEndpoint(req, res) {
     });
 }
 function listEndpoint(req, res) {
-    let user_id = req.headers['user'].data.id
+    let user_id = req.headers['user'].data._id
     let project_id = req.params.pid;
 
     let __owner__ = user_id;

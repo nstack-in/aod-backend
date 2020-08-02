@@ -70,7 +70,7 @@ function login(req, res) {
                     token = jwt.sign({
                         exp: Math.floor(Date.now() / 1000) + (60 * 60),
                         data: {
-                            id: user[0].id,
+                            _id: user[0].id,
                             name: user[0].name,
                             email: user[0].email,
                         }

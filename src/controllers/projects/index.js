@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 
 function createProject(req, res) {
-    req.body.__owner__ = req.headers['user'].data.id;
+    req.body.__owner__ = req.headers['user'].data._id;
     req.body.__version__ = global.version;
     let currentTime = Date.now();
     if (req.body.name != "")
@@ -37,7 +37,7 @@ function createProject(req, res) {
 }
 
 function listProjects(req, res) {
-    let user_id = req.headers['user'].data.id;
+    let user_id = req.headers['user'].data._id;
     ProjectModel.find({ __owner__: user_id }).populate("endpoints").then(function (data) {
         // if (err) return res.json({
         //      response_time: `${(Date.now() - req.start)/3}ms`,
@@ -60,7 +60,7 @@ function listProjects(req, res) {
 }
 
 function findProjects(req, res) {
-    let user_id = req.headers['user'].data.id;
+    let user_id = req.headers['user'].data._id;
     ProjectModel.findOne({ __owner__: user_id, _id: req.params.pid })
         .populate("endpoints")
         .then(function (data) {
@@ -80,10 +80,9 @@ function findProjects(req, res) {
 }
 
 function updateProject(req, res) {
-    let user_id = req.headers['user'].data.id;
-    var valid = mongoose.Types.ObjectId.isValid(req.params.pid);
+    let user_id = req.headers['user'].data._id;
     let update = (({ name, description }) => ({ name, description }))(req.body);
-    update.__owner__ = req.headers['user'].data.id;
+    update.__owner__ = user_id;
     ProjectModel.findOneAndUpdate(
         { __owner__: user_id, _id: req.params.pid },
         update,
@@ -106,7 +105,7 @@ function updateProject(req, res) {
 
 }
 async function removeProject(req, res) {
-    let user_id = req.headers['user'].data.id;
+    let user_id = req.headers['user'].data._id;
     let project_id = req.params.pid;
     try {
         await EndpointModel.remove({ __project__: project_id, __owner__: user_id });
